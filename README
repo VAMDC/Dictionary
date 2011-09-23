@@ -1,0 +1,6 @@
+This repo holds the VAMDC dictionary in form
+of of a SQLite database, plus a Djange-based
+web app that provides different ways of
+browsing, helper tools for node setup and
+editing of the dictionary though djangos
+adin interface.
