@@ -6,7 +6,7 @@ class Usage(models.Model):
         return u'%s'%self.name
 
 class KeyWord(models.Model):
-    name = models.CharField(max_length=256)
+    name = models.CharField(max_length=256,unique=True)
     sdescr = models.TextField('Short description')
     ldescr = models.TextField('Long description')
     type = models.CharField('Type',max_length=1, choices=( ('s','String'),
