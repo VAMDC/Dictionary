@@ -152,25 +152,19 @@ def makedicts(selected):
             content += '\'%s\':\'\',\n'%kw.name
 
     content += '}\n\n\n'
-    content += """
-# Do not edit or remove these three lines
-from vamdctap.caselessdict import CaselessDict
-RETURNABLES = CaselessDict(RETURNABLES)
-RESTRICTABLES = CaselessDict(RESTRICTABLES)
-"""
     return content
 
 class SelectKeyWordFormSet(forms.models.BaseModelFormSet):
     def add_fields(self, form, index):
         super(SelectKeyWordFormSet, self).add_fields(form, index)
         form.fields["include"] = forms.BooleanField(required=False, label="Include this keyword")
-    
+
 
 def makenew(request):
     q = Q(usage=RESTRICTA) | Q(usage=RETURNA)
     queryset = KeyWord.objects.filter(q).distinct()
     MakeNewFormSet = modelformset_factory(KeyWord,formset=SelectKeyWordFormSet,extra=0)
-        
+
     if request.method == 'POST':
         formset = MakeNewFormSet(request.POST,request.FILES,queryset=queryset)
         if formset.is_valid():
