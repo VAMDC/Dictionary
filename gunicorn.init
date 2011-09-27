@@ -5,7 +5,7 @@
 CONFIG = {
     'mode': 'django',
     'environment': {
-        'PYTHONPATH': '/opt/VamdcDictionary/',
+#        'PYTHONPATH': '/opt/VamdcDictionary/',
     },
     'working_dir': '/opt/VamdcDictionary/',
     'user': 'vald',

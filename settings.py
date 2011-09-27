@@ -10,7 +10,7 @@ MANAGERS = ADMINS
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'dict.sqlite',
+        'NAME': '/opt/VamdcDictionary/dict.sqlite',
     }
 }
 
