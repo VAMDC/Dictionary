@@ -8,8 +8,8 @@ CONFIG = {
 #        'PYTHONPATH': '/opt/VamdcDictionary/',
     },
     'working_dir': '/opt/VamdcDictionary/',
-    'user': 'vald',
-    'group': 'vald',
+    'user': 'vamdc',
+    'group': 'vamdc',
     'args': (
         '--bind=unix:/tmp/vamdcdict-gunicorn.sock',
         '--workers=3',
