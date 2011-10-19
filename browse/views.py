@@ -12,6 +12,7 @@ from models import Usage,KeyWord
 RETURNA=Usage.objects.get(pk=2)
 REQUESTA=Usage.objects.get(pk=3)
 RESTRICTA=Usage.objects.get(pk=1)
+RetQ = Q(usage=RETURNA)
 
 import re
 REGEX1=re.compile(r"""^\s*(RETURNABLES|RESTRICTABLES)\s*=\s*\{\s*\\?\s*(['"]\w+['"]\s*:\s*[ru]?['"][\w\-\\_\.,/()\[\]'"=\ ]*['"]\s*,?\s*)*\s*\}\s*$""")
@@ -20,23 +21,26 @@ REGEX2=re.compile(r"""^(Atom|AtomState|Source|Molecule|MoleculeState|CollTran|Ra
 
 from string import strip,lower
 
-def browse_by_type(request):
-    atoms = KeyWord.objects.filter(block__in=('at','as'))
+def returnables_by_type(request):
+    atoms = KeyWord.objects.filter(RetQ, block__in=('at','as'))
     atoms.desc = 'Atoms and atomic states'
     atoms.tag = 'at'
-    molecs = KeyWord.objects.filter(block__in=('mo','ms','mq'))
+    molecs = KeyWord.objects.filter(RetQ, block__in=('mo','ms','mq'))
     molecs.desc = 'Molecules, their states and quantum numbers'
     molecs.tag = 'mo'
-    noxsams = KeyWord.objects.filter(block=None)
-    noxsams.desc = 'Keywords without a place in XSAMS'
-    noxsams.tag = 'nx'
-    procs = KeyWord.objects.filter(block__in=('rt','ct','nr'))
+    solp= KeyWord.objects.filter(RetQ, block__in=('sd','pa'))
+    solp.desc = 'Solids and Particles'
+    solp.tag = 'sp'
+    procs = KeyWord.objects.filter(RetQ, block__in=('rt','ct','nr'))
     procs.desc = 'Processes'
     procs.tag = 'pr'
-    oth = KeyWord.objects.filter(block__in=('en','fu','me','so'))
+    oth = KeyWord.objects.filter(RetQ, block__in=('en','fu','me','so'))
     oth.desc = 'Environments, Functions, Methods and Sources'
     oth.tag = 'oh'
-    blocs = [atoms, molecs, procs, oth, noxsams]
+    noxsams = KeyWord.objects.filter(RetQ, block=None)
+    noxsams.desc = 'Unclassified Keywords'
+    noxsams.tag = 'nx'
+    blocs = [atoms, molecs, solp, procs, oth, noxsams]
     return render_to_response('dictionary/bytype.html',
         RequestContext(request,{'blocs': blocs}))
 
