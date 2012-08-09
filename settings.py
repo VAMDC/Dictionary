@@ -27,7 +27,7 @@ MEDIA_ROOT = ''
 MEDIA_URL = ''
 SECRET_KEY = '%l%4o(43#bv8&$7j=9!+%k+!vkpf*kg3@62js983'
 ROOT_URLCONF = 'urls'
-STATIC_URL = '/static/'
+STATIC_URL = '/'
 
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
