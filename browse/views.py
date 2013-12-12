@@ -7,6 +7,8 @@ from django.db.models import Q
 from django.forms.models import modelformset_factory
 #from django.forms.formsets import formset_factory
 from django.http import HttpResponseRedirect, HttpResponse
+from django.contrib.admin.models import LogEntry
+
 
 from models import Usage,KeyWord
 RETURNA=Usage.objects.get(pk=2)
@@ -20,6 +22,21 @@ REGEX1=re.compile(r"""^\s*(RETURNABLES|RESTRICTABLES)\s*=\s*\{\s*\\?\s*(['"]\w+[
 REGEX2=re.compile(r"""^(Atom|AtomState|Source|Molecule|MoleculeState|CollTran|RadTran|Method|MoleQNs)\..*$""")
 
 from string import strip,lower
+
+def log(request):
+    logs = LogEntry.objects.all()
+    return render_to_response('dictionary/log.html',
+            RequestContext(request,{'object_list':logs}))
+
+def restrictables(request):
+    words = KeyWord.objects.filter(usage=RESTRICTA)
+    return render_to_response('dictionary/index.html',
+            RequestContext(request,{'firstpara':'Restrictables','object_list':words}))
+
+def requestables(request):
+    words = KeyWord.objects.filter(usage=REQUESTA)
+    return render_to_response('dictionary/index.html',
+            RequestContext(request,{'firstpara':'Requestabless','object_list':words}))
 
 def returnables_by_type(request):
     atoms = KeyWord.objects.filter(RetQ, block__in=('at','as'))
