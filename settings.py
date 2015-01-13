@@ -1,16 +1,13 @@
-DEBUG = True
-TEMPLATE_DEBUG = DEBUG
+DEBUG = False
 
 ADMINS = (
-    ('VALD user', 'vald@localhost'),
+    ('vamdc dictionary', 'thomas.marquart@astro.uu.se'),
 )
-
-MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': '/opt/VamdcDictionary/dict.sqlite',
+        'NAME': 'dict.sqlite',
     }
 }
 
@@ -28,6 +25,8 @@ MEDIA_URL = ''
 SECRET_KEY = '%l%4o(43#bv8&$7j=9!+%k+!vkpf*kg3@62js983'
 ROOT_URLCONF = 'urls'
 STATIC_URL = '/'
+ALLOWED_HOSTS=['*']
+TEST_RUNNER = 'django.test.runner.DiscoverRunner'
 
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
