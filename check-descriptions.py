@@ -4,10 +4,13 @@ import django, os
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "settings")
 django.setup()
 
+from django.db.models import Q
 from browse.models import KeyWord, Usage
 RESTR = Usage.objects.get(name='Restrictable')
 
-ks = KeyWord.objects.filter(sdescr='.').filter(usage=RESTR)
+noMeth = ~Q(name__endswith='Method')
+noRef = ~Q(name__endswith='Ref')
+ks = KeyWord.objects.filter(sdescr='.')
 print ks.count()
 
 for k in ks:
