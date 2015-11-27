@@ -1,0 +1,16 @@
+[Unit]
+Description=The gunicorn sevice that runs dict.vamdc.org
+After=network.target
+
+[Service]
+PIDFile=/run/vamdc/dict.pid
+User=vamdc
+Group=vamdc
+WorkingDirectory=/opt/VamdcDictionary/
+ExecStart=/usr/local/bin/gunicorn-pypy --pid /run/vamdc/dict.pid --workers 3 --bind unix:/run/vamdc/dict.socket wsgi
+ExecReload=/bin/kill -s HUP $MAINPID
+ExecStop=/bin/kill -s TERM $MAINPID
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

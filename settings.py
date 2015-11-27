@@ -1,4 +1,5 @@
 DEBUG = False
+DEBUG = True
 
 ADMINS = (
     ('vamdc dictionary', 'thomas.marquart@astro.uu.se'),
@@ -25,6 +26,7 @@ MEDIA_URL = ''
 SECRET_KEY = '%l%4o(43#bv8&$7j=9!+%k+!vkpf*kg3@62js983'
 ROOT_URLCONF = 'urls'
 STATIC_URL = '/'
+#STATIC_ROOT='/opt/VamdcDictionary/static'
 ALLOWED_HOSTS=['*']
 TEST_RUNNER = 'django.test.runner.DiscoverRunner'
 
@@ -47,9 +49,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.sites',
     'django.contrib.messages',
-    # Uncomment the next line to enable the admin:
+    'django.contrib.staticfiles',
     'django.contrib.admin',
-    # Uncomment the next line to enable admin documentation:
-    # 'django.contrib.admindocs',
     'browse',
 )
