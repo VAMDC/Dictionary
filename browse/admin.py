@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.admin.models import LogEntry
-from models import *
+from .models import *
 
 RETURNA=Usage.objects.get(pk=2)
 REQUESTA=Usage.objects.get(pk=3)

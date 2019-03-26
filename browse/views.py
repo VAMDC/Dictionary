@@ -10,7 +10,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.admin.models import LogEntry
 
 
-from models import Usage,KeyWord
+from .models import Usage,KeyWord
 RETURNA=Usage.objects.get(pk=2)
 REQUESTA=Usage.objects.get(pk=3)
 RESTRICTA=Usage.objects.get(pk=1)
@@ -20,8 +20,6 @@ import re
 REGEX1=re.compile(r"""^\s*(RETURNABLES|RESTRICTABLES)\s*=\s*\{\s*\\?\s*(['"]\w+['"]\s*:\s*[ru]?['"][\w\-\\_\.,/()\[\]'"=\ ]*['"]\s*,?\s*)*\s*\}\s*$""")
 
 REGEX2=re.compile(r"""^(Atom|AtomState|Source|Molecule|MoleculeState|CollTran|RadTran|Method|MoleQNs)\..*$""")
-
-from string import strip,lower
 
 def log(request):
     logs = LogEntry.objects.all()
@@ -95,7 +93,7 @@ def check_unit(kw,keys):
     try: k = KeyWord.objects.get(name__iexact=kw)
     except: return
     if k.datatype:
-        keys = map(lower,keys)
+        keys = map(str.lower,keys)
         if not kw.lower() + 'unit' in keys:
             return 'You use the DataType %s but not the corresponding keyword for its unit (%sUnit).'%(kw,kw)
 
@@ -105,11 +103,11 @@ def validate_dict(data):
         errors.append('First syntax check did not pass. (Comments with # are not allowed in this check.)')
 
     name,value = data.split('=')
-    name=strip(name)
+    name=str.strip(name)
     if name == 'RETURNABLES': usage = RETURNA
     elif name == 'RESTRICTABLES': usage = RESTRICTA
     else: errors.append('Neither RETURNABLES or RESTRICTABLES assignment found')
-    value = ''.join(map(strip,map(strip,value.splitlines()),'\\'))
+    value = ''.join(map(str.strip,map(strip,value.splitlines()),'\\'))
     try: value=eval(value)
     except:
         errors.append('Second check (evalution) did not pass. Please check that your input is correct Python code.')

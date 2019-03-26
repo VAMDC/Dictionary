@@ -1,14 +1,14 @@
-from django.conf.urls import patterns, url, include
+from django.urls import path, include
 from django.views.generic.base import TemplateView
 
-urlpatterns = patterns('',
-    url(r'^$', TemplateView.as_view(template_name='dictionary/intro.html')),
-    )
-urlpatterns += patterns('browse.views',
-    (r'^returnables/$', 'returnables_by_type'),
-    (r'^restrictables/$', 'restrictables'),
-    (r'^requestables/$', 'requestables'),
-    (r'^log/$', 'log'),
-    (r'^check/$', 'check'),
-    (r'^new/$', 'makenew'),
-)
+from .views import *
+
+urlpatterns = [
+    path('', TemplateView.as_view(template_name='dictionary/intro.html')),
+    path('returnables/', returnables_by_type),
+    path('restrictables/', restrictables),
+    path('requestables/', requestables),
+    path('log/', log),
+    path('check/', check),
+    path('new/', makenew),
+]
