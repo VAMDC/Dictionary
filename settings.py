@@ -1,5 +1,5 @@
 DEBUG = False
-DEBUG = True
+#DEBUG = True
 
 ADMINS = (
     ('vamdc dictionary', 'thomas.marquart@astro.uu.se'),

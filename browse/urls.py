@@ -5,10 +5,10 @@ from .views import *
 
 urlpatterns = [
     path('', TemplateView.as_view(template_name='browse/intro.html')),
-    path('returnables/', returnables_by_type),
-    path('restrictables/', restrictables),
-    path('requestables/', requestables),
-    path('log/', log),
-    path('check/', check),
-    path('new/', makenew),
+    re_path(r'returnables/?$', returnables_by_type),
+    re_path(r'restrictables/?$', restrictables),
+    re_path(r'requestables/?$', requestables),
+    re_path(r'log/?$', log),
+    re_path(r'check/?$', check),
+    re_path(r'new/?$', makenew),
 ]
