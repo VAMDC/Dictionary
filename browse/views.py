@@ -1,6 +1,6 @@
 # Create your views here.
 from django import forms
-from django.shortcuts import render_to_response
+from django.shortcuts import render
 from django.template import RequestContext
 from django.core.exceptions import ValidationError
 from django.db.models import Q
@@ -23,18 +23,15 @@ REGEX2=re.compile(r"""^(Atom|AtomState|Source|Molecule|MoleculeState|CollTran|Ra
 
 def log(request):
     logs = LogEntry.objects.all()
-    return render_to_response('dictionary/log.html',
-            RequestContext(request,{'object_list':logs}))
+    return render(request,'browse/log.html',{'object_list':logs})
 
 def restrictables(request):
     words = KeyWord.objects.filter(usage=RESTRICTA)
-    return render_to_response('dictionary/index.html',
-            RequestContext(request,{'firstpara':'Restrictables','object_list':words}))
+    return render(request,'browse/index.html',{'firstpara':'Restrictables','object_list':words})
 
 def requestables(request):
     words = KeyWord.objects.filter(usage=REQUESTA)
-    return render_to_response('dictionary/index.html',
-            RequestContext(request,{'firstpara':'Requestabless','object_list':words}))
+    return render(request,'browse/index.html',{'firstpara':'Requestables','object_list':words})
 
 def returnables_by_type(request):
     atoms = KeyWord.objects.filter(RetQ, block__in=('at','as'))
@@ -56,8 +53,7 @@ def returnables_by_type(request):
     noxsams.desc = 'Unclassified Keywords'
     noxsams.tag = 'nx'
     blocs = [atoms, molecs, solp, procs, oth, noxsams]
-    return render_to_response('dictionary/bytype.html',
-        RequestContext(request,{'blocs': blocs}))
+    return render(request, 'browse/bytype.html', {'blocs': blocs})
 
 def bareKW(kw):
     kw = kw.lower()
@@ -141,7 +137,7 @@ def check(request):
 
     else:
         form=CheckForm()
-    return render_to_response('dictionary/check.html', RequestContext(request,{'form': form}))
+    return render(request, 'browse/check.html', {'form': form})
 
 
 #########
@@ -199,4 +195,4 @@ def makenew(request):
     else:
         formset = MakeNewFormSet(queryset=queryset)
 
-    return render_to_response('dictionary/makenew.html', RequestContext(request,{'formset': formset}))
+    return render(request, 'browse/makenew.html', {'formset': formset})

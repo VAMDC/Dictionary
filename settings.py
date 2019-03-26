@@ -12,10 +12,6 @@ DATABASES = {
     }
 }
 
-TEMPLATE_DIRS = (
-    '/opt/VamdcDictionary/static/templates',
-)
-
 TIME_ZONE = 'Europe/Stockholm'
 LANGUAGE_CODE = 'en-us'
 SITE_ID = 1
@@ -30,6 +26,23 @@ STATIC_URL = '/'
 ALLOWED_HOSTS=['*']
 TEST_RUNNER = 'django.test.runner.DiscoverRunner'
 
+APPEND_SLASH = True
+
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+            ],
+        },
+    },
+]
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
     'django.template.loaders.app_directories.Loader',
