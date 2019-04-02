@@ -5,6 +5,9 @@ ADMINS = (
     ('vamdc dictionary', 'thomas.marquart@astro.uu.se'),
 )
 
+SERVER_EMAIL = 'vamdc-dict-noreply@neon.physics.uu.se'
+DEFAULT_FROM_EMAIL = SERVER_EMAIL
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
