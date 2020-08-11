@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 
@@ -6,7 +7,7 @@
 <meta name="description" content="description"/>
 <meta name="keywords" content="keywords"/> 
 <meta name="author" content="author"/> 
-<link rel="stylesheet" type="text/css" href="/css/indigo.css" media="screen"/>
+<link rel="stylesheet" type="text/css" href="{% static "css/indigo.css" %}" media="screen"/>
 <title>{% block title %}VAMDC dictionary{% endblock %}</title>
 {% block addheader %}{% endblock %}
 </head>
@@ -18,14 +19,8 @@
 	<div class="header">
 
 		<div class="title">
-		  <h1>{% block headline %}The VAMDC dictionary{% endblock %}</h1>
+		  <h1><a href="/">The VAMDC dictionary</a></h1>
 		</div>
-<!--		<div class="navigation">
-		  {% block topnavi %}
-		        <a href="/portal/">Home</a>
-
-		{% endblock %}
--->
 			<div class="clearer"><span></span></div>
 
 		</div>
@@ -46,26 +41,17 @@
 			<h1>Dictionary</h1>
 			<ul>
 				<li><a href="/restrictables/">Restrictables</a></li>
-                <li><a href="/requestables/">Requestables</a></li>
+                                <li><a href="/requestables/">Requestables</a></li>
 				<li><a href="/returnables/">Returnables</a></li>
-				<li><a href="/log/">Log</a></li>
-    			<li><a href="/admin/">Edit main dictionary</a></li>
+				<li><a href="/og/">Log</a></li>
+    				<li><a href="/admin/">Edit main dictionary</a></li>
 			</ul>
 			<h1>Links</h1>
 			<ul>
 				<li><a href="http://www.vamdc.eu">VAMDC Homepage</a></li>
-				<li><a href="http://voparis-twiki.obspm.fr/twiki/bin/view/VAMDC/">VAMDC Wiki</a></li>
-				<li><a href="http://www.uu.se">UU</a></li>
+				<li><a href="http://www.astro.uu.se">Astronomy Uppsala</a></li>
 				
 			</ul>
-			<!-- 
-			   <h1>Search</h1>
-			<form action="index.html">
-			<div>
-				<input type="text" name="search" class="styled" /> <input type="submit" value="submit" class="button" />
-			</div>
-			</form> 
-			-->
 			<p style="height: 400px;"></p>
 			{% endblock %}
 			{% block sidebar2 %}

@@ -15,6 +15,8 @@ DATABASES = {
     }
 }
 
+STATIC_URL='/static/'
+STATIC_ROOT='./static/'
 TIME_ZONE = 'Europe/Stockholm'
 LANGUAGE_CODE = 'en-us'
 SITE_ID = 1
@@ -22,14 +24,12 @@ USE_I18N = False
 USE_L10N = False
 MEDIA_ROOT = ''
 MEDIA_URL = ''
-SECRET_KEY = '%l%4o(43#bv8&$7j=9!+%k+!vkpf*kg3@62js983'
-ROOT_URLCONF = 'urls'
-STATIC_URL = '/'
-#STATIC_ROOT='/opt/VamdcDictionary/static'
-ALLOWED_HOSTS=['*']
-TEST_RUNNER = 'django.test.runner.DiscoverRunner'
+SECRET_KEY = '%l%4o(43#bv5&$7j=9!+%k+!vkpf*kg3@62js983'
 
+
+ROOT_URLCONF = 'urls'
 APPEND_SLASH = True
+ALLOWED_HOSTS=['*']
 
 TEMPLATES = [
     {
@@ -51,7 +51,7 @@ TEMPLATE_LOADERS = (
     'django.template.loaders.app_directories.Loader',
 )
 
-MIDDLEWARE_CLASSES = (
+MIDDLEWARE = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -65,7 +65,22 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.sites',
     'django.contrib.messages',
-#    'django.contrib.staticfiles',
+    'django.contrib.staticfiles',
     'django.contrib.admin',
     'browse',
 )
+
+LOGGING = {
+    'version': 1,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        }
+    },
+    'loggers': {
+        'django.db.backends': {
+            'level': 'DEBUG',
+            'handlers': ['console'],
+        }
+    }
+}
