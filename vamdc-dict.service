@@ -7,7 +7,8 @@ PIDFile=/run/vamdc/dict.pid
 User=vamdc
 Group=vamdc
 WorkingDirectory=/opt/VamdcDictionary/
-ExecStart=/usr/local/bin/gunicorn-pypy --pid /run/vamdc/dict.pid --workers 3 --bind unix:/run/vamdc/dict.socket wsgi
+# the secret key is read from /opt/VamdcDictionary/secrets.txt by settings.py
+ExecStart=/opt/VamdcDictionary/.venv/bin/gunicorn --pid /run/vamdc/dict.pid --workers 3 --bind unix:/run/vamdc/dict.socket wsgi:application
 ExecReload=/bin/kill -s HUP $MAINPID
 ExecStop=/bin/kill -s TERM $MAINPID
 PrivateTmp=true

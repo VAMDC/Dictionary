@@ -1,6 +1,32 @@
 This repo holds the VAMDC dictionary in form
-of of a SQLite database, plus a Djange-based
+of a SQLite database, plus a Django-based
 web app that provides different ways of
 browsing, helper tools for node setup and
-editing of the dictionary though djangos
-adin interface.
+editing of the dictionary through django's
+admin interface.
+
+Running it
+----------
+Dependencies are managed with uv (pyproject.toml, uv.lock):
+
+    uv sync                                  # creates .venv
+    cp secrets.txt.example secrets.txt       # then put a real key in it
+    uv run python manage.py runserver
+
+The secret key is read from secrets.txt next to settings.py, or from the
+environment, which takes precedence. Without one the app refuses to start
+unless VAMDC_DICT_DEBUG=1. secrets.txt is gitignored; keep it that way.
+See secrets.txt.example for the other supported settings.
+
+Deployment
+----------
+gunicorn runs out of the checkout's own .venv, see vamdc-dict.service. The
+secret key lives in /opt/VamdcDictionary/secrets.txt (chmod 600, owned by the
+vamdc user). After pulling a new version:
+
+    uv sync
+    uv run python manage.py migrate
+    uv run python manage.py collectstatic --noinput   # admin css/js into static/
+    systemctl restart vamdc-dict
+
+Caddy serves static/ directly and terminates TLS.

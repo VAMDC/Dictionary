@@ -21,3 +21,6 @@ doc*/build/*
 *.dat
 *.log
 dict_bare.sqlite
+.venv/
+__pycache__/
+secrets.txt
