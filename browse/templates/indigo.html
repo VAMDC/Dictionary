@@ -17,17 +17,15 @@
 <div class="container">
 
 	<div class="header">
-
 		<div class="title">
+		  <a href="/"><img class="logo" src="{% static "img/vamdc-logo.png" %}" alt="VAMDC"/></a>
 		  <h1><a href="/">The VAMDC dictionary</a></h1>
 		</div>
-			<div class="clearer"><span></span></div>
-
-		</div>
+		<div class="clearer"><span></span></div>
 	</div>
 
 	<div class="main">
-		
+
 		<div class="content">
 		  {% block content %}
 		  {% endblock %}
@@ -45,6 +43,7 @@
 				<li><a href="/returnables/">Returnables</a></li>
 				<li><a href="/log/">Log</a></li>
 				<li><a href="/check/">Check your dictionaries</a></li>
+				<li><a href="/new/">Select keywords</a></li>
     				<li><a href="/admin/">Edit main dictionary</a></li>
 			</ul>
 			<h1>Links</h1>

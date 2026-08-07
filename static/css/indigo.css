@@ -19,7 +19,7 @@ a:hover {
 	color: #C60;
 }
 body {
-	background: #0094D6 url(/static/img/bg.gif) repeat-x;
+	background: #0094D6;
 	color: #466;
 	font: normal 62.5% "Lucida Sans Unicode",sans-serif;
 	margin: 0;
@@ -65,21 +65,38 @@ h1,h2,h3 {
 
 /* structure */
 .container {
-	background: url(/static/img/topleft.gif) no-repeat;
+	background: #FFF;
 }
 
 .header {
-	height: 92px;
+	background: #FFF;
+	border-bottom: 3px solid #0094D6;
+	padding: 16px 0 14px 40px;
 }
 
 /* title */
 .title {
 	float: left;
-	padding: 28px 0 0 200px;
+}
+.title .logo {
+	border: 0;
+	float: left;
+	height: 46px;
+	margin-right: 18px;
+	width: auto;
 }
 .title h1 {
-	color: #FFF;
-	font: normal 2em Verdana,sans-serif;
+	float: left;
+	font: normal 1.9em Verdana,sans-serif;
+	line-height: 46px;
+	white-space: nowrap;
+}
+.title h1 a {
+	color: #456;
+	text-decoration: none;
+}
+.title h1 a:hover {
+	color: #F70;
 }
 
 /* navigation */
@@ -220,8 +237,14 @@ border: 1px solid #CCC;
 padding: 3px;
 }
 
-th { background-color: #DDE;
+th {
+	background-color: #DDE;
+	position: sticky;
+	top: 0;
+	z-index: 1;
 }
+
+.content table tr:hover td { background-color: #EAF3F9; }
 
 .row2 td { background-color: #EEE;
 }
