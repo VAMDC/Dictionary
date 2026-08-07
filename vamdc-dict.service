@@ -3,15 +3,16 @@ Description=The gunicorn sevice that runs dict.vamdc.org
 After=network.target
 
 [Service]
-PIDFile=/run/vamdc/dict.pid
+PIDFile=/run/vamdc-dict/dict.pid
 User=vamdc
 Group=vamdc
 WorkingDirectory=/opt/VamdcDictionary/
 # the secret key is read from /opt/VamdcDictionary/secrets.txt by settings.py
-ExecStart=/opt/VamdcDictionary/.venv/bin/gunicorn --pid /run/vamdc/dict.pid --workers 3 --bind unix:/run/vamdc/dict.socket wsgi:application
+ExecStart=/opt/VamdcDictionary/.venv/bin/gunicorn --pid /run/vamdc-dict/dict.pid --workers 3 --bind unix:/run/vamdc-dict/dict.socket wsgi:application
 ExecReload=/bin/kill -s HUP $MAINPID
 ExecStop=/bin/kill -s TERM $MAINPID
 PrivateTmp=true
+RuntimeDirectory=vamdc-dict
 
 [Install]
 WantedBy=multi-user.target
