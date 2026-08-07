@@ -201,3 +201,19 @@ th { background-color: #DDE;
 
 .row2 td { background-color: #EEE;
 }
+
+tr:target td { background-color: #FFD; }
+
+a.kwlink { color: inherit; text-decoration: none; }
+a.kwlink:hover { text-decoration: underline; }
+
+/* permalink marker, revealed on hover; visibility keeps the column from jumping */
+a.kwlink::after { content: " #"; color: #F70; visibility: hidden; }
+tr:hover a.kwlink::after, a.kwlink:focus::after { visibility: visible; }
+
+summary {
+cursor: pointer;
+font-size: 1.2em;
+font-weight: bold;
+margin: 0.8em 0 0.4em 0;
+}

@@ -1,37 +1,52 @@
 {% extends "browse/index.html" %}
 
 {% block addheader %}
-<script language="javascript">
-  function toggleDiv(divid){
-      if(document.getElementById(divid).style.display == 'none'){
-         document.getElementById(divid).style.display = 'block';
-  }else{
-         document.getElementById(divid).style.display = 'none'
-}}
+<script type="text/javascript">
+  // open the section containing the anchor the user arrived at, so that
+  // deep links from other pages land on a visible row
+  function revealTarget() {
+      var hash = window.location.hash;
+      if (hash.length < 2) return;
+      var el = document.getElementById(decodeURIComponent(hash.substring(1)));
+      if (!el) return;
+      var sect = el.closest('details');
+      while (sect) {
+          sect.open = true;
+          sect = sect.parentElement.closest('details');
+      }
+      el.scrollIntoView();
+  }
+  function setAllSections(open) {
+      var sects = document.getElementsByTagName('details');
+      for (var i = 0; i < sects.length; i++) sects[i].open = open;
+  }
+  window.addEventListener('DOMContentLoaded', revealTarget);
+  window.addEventListener('hashchange', revealTarget);
 </script>
 {% endblock %}
 
 {% block content %}
 
-<p>Returnables</p>
+<p>Returnables
+(<a href="javascript:;" onclick="setAllSections(true);">expand all</a> |
+<a href="javascript:;" onclick="setAllSections(false);">collapse all</a>)</p>
 
 {% for bloc in blocs %}
-<h3>{{ bloc.desc }}</h3>
-<div id="block{{ bloc.tag}}" style="display:none">
-<p><a href="javascript:;" onmousedown="toggleDiv('block{{ bloc.tag }}');">Show/Hide</a></p>
+<details id="block{{ bloc.tag }}">
+<summary>{{ bloc.desc }}</summary>
 <table>
 <tr><th>Keyword</th><th>Short Description</th><th>Long Description</th><th>Type</th><th>*</th></tr>
 {% for keyword in bloc %}
-<tr class="{% cycle 'row1' 'row2' %}">
-<td>{{ keyword.name }}</td>
+<tr class="{% cycle 'row1' 'row2' %}" id="{{ keyword.anchor }}">
+<td><a class="kwlink" href="#{{ keyword.anchor }}" title="Link to this keyword">{{ keyword.name }}</a></td>
 <td>{{ keyword.sdescr }}</td>
 <td>{{ keyword.ldescr }}</td>
 <td>{% if keyword.type %}{{ keyword.get_type_display }}{% endif %}</td>
 <td>{% if keyword.datatype %}*{% endif %}</td>
+</tr>
 {% endfor %}
 </table>
-</div>
-<p><a href="javascript:;" onmousedown="toggleDiv('block{{ bloc.tag }}');">Show/Hide</a></p>
+</details>
 {% endfor %}
 
 {% endblock %}
@@ -44,7 +59,7 @@
 </p>
 
 <ul>
-<li><strong>Keyword</strong>: The actual name of the dictionary entry. These are what is used in the query language and when you fill Restrictables and Returnables.</li>
+<li><strong>Keyword</strong>: The actual name of the dictionary entry. These are what is used in the query language and when you fill Restrictables and Returnables. Each keyword is directly linkable: click it, or append <strong>#AtomSymbol</strong> to this page's address &mdash; the section it lives in then opens automatically.</li>
 <li><strong>Short Description</strong>: Human-readable short text about the meaning. To be used e.g. as label text for a web-form</li>
 <li><strong>Long Description</strong>: Human-readable longer text, to be used eg. in a help-box.</li>
 <li><strong>Type</strong>: What type of data are associated with the keyword. choices are: string, float, integer, boolean.</li>

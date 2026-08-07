@@ -9,13 +9,14 @@
 <table>
 <tr><th>Keyword</th><th>Short Description</th><th>Long Description</th><th>Type</th><th>Constraint</th><th>Unit</th></tr>
 {% for keyword in object_list %}
-<tr class="{% cycle 'row1' 'row2' %}">
-<td>{{ keyword.name }}</td>
+<tr class="{% cycle 'row1' 'row2' %}" id="{{ keyword.anchor }}">
+<td><a class="kwlink" href="#{{ keyword.anchor }}" title="Link to this keyword">{{ keyword.name }}</a></td>
 <td>{{ keyword.sdescr }}</td>
 <td>{{ keyword.ldescr }}</td>
 <td>{% if keyword.type %}{{ keyword.get_type_display }}{% endif %}</td>
 <td>{% if keyword.constr %}{{ keyword.constr }}{% endif %}</td>
 <td>{% if keyword.unit %}{{ keyword.unit }}{% endif %}</td>
+</tr>
 {% endfor %}
 </table>
 <p/>
@@ -27,7 +28,7 @@
 </p>
 
 <ul>
-<li><strong>Keyword</strong>: The actual name of the dictionary entry. These are what is used in the query language and when you fill Restrictables and Returnables.</li>
+<li><strong>Keyword</strong>: The actual name of the dictionary entry. These are what is used in the query language and when you fill Restrictables and Returnables. Each keyword is directly linkable: click it, or append <strong>#IonCharge</strong> to this page's address.</li>
 <li><strong>Short Description</strong>: Human-readable short text about the meaning. To be used e.g. as label text for a web-form</li>
 <li><strong>Long Description</strong>: Human-readable longer text, to be used eg. in a help-box.</li>
 <li><strong>Type</strong>: What type of data are associated with the keyword. choices are: string, float, integer, boolean.</li>

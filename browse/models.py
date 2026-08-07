@@ -40,6 +40,12 @@ class KeyWord(models.Model):
     def list_usages(self):
         return ', '.join([u.name for u in self.usage.all()])
 
+    @property
+    def anchor(self):
+        # keyword names occasionally carry stray whitespace, which would
+        # break the fragment identifier
+        return self.name.strip()
+
     def __unicode__(self):
         return u'%s'%self.name
 
