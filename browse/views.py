@@ -1,20 +1,20 @@
 # Create your views here.
+import ast
+
 from django import forms
 from django.shortcuts import render
-from django.template import RequestContext
 from django.core.exceptions import ValidationError
 from django.db.models import Q
 from django.forms.models import modelformset_factory
-#from django.forms.formsets import formset_factory
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponse
 from django.contrib.admin.models import LogEntry
 
 
-from .models import Usage,KeyWord
-RETURNA=Usage.objects.get(pk=2)
-REQUESTA=Usage.objects.get(pk=3)
-RESTRICTA=Usage.objects.get(pk=1)
-RetQ = Q(usage=RETURNA)
+from .models import KeyWord
+
+RETURNABLE = 'Returnable'
+REQUESTABLE = 'Requestable'
+RESTRICTABLE = 'Restrictable'
 
 import re
 REGEX1=re.compile(r"""^\s*(RETURNABLES|RESTRICTABLES)\s*=\s*\{\s*\\?\s*(['"]\w+['"]\s*:\s*[ru]?['"][\w\-\\_\.,/()\[\]'"=\ ]*['"]\s*,?\s*)*\s*\}\s*$""")
@@ -26,14 +26,15 @@ def log(request):
     return render(request,'browse/log.html',{'object_list':logs})
 
 def restrictables(request):
-    words = KeyWord.objects.filter(usage=RESTRICTA)
+    words = KeyWord.objects.filter(usage__name=RESTRICTABLE)
     return render(request,'browse/index.html',{'firstpara':'Restrictables','object_list':words})
 
 def requestables(request):
-    words = KeyWord.objects.filter(usage=REQUESTA)
+    words = KeyWord.objects.filter(usage__name=REQUESTABLE)
     return render(request,'browse/index.html',{'firstpara':'Requestables','object_list':words})
 
 def returnables_by_type(request):
+    RetQ = Q(usage__name=RETURNABLE)
     atoms = KeyWord.objects.filter(RetQ, block__in=('at','as'))
     atoms.desc = 'Atoms and atomic states'
     atoms.tag = 'at'
@@ -77,9 +78,9 @@ def check_keyword_exists(kw):
 
 def check_keyword_usage(kw,usage):
     try: kw = KeyWord.objects.get(name__iexact=kw)
-    except: return
-    if not usage in kw.usage.all():
-        return '%s is not a %s according to the dictionary.'%(kw,usage.name)
+    except KeyWord.DoesNotExist: return
+    if not kw.usage.filter(name=usage).exists():
+        return '%s is not a %s according to the dictionary.'%(kw,usage)
 
 def check_returnvalues(kw,value):
     if not REGEX2.match(value):
@@ -87,9 +88,9 @@ def check_returnvalues(kw,value):
 
 def check_unit(kw,keys):
     try: k = KeyWord.objects.get(name__iexact=kw)
-    except: return
+    except KeyWord.DoesNotExist: return
     if k.datatype:
-        keys = map(str.lower,keys)
+        keys = [key.lower() for key in keys]
         if not kw.lower() + 'unit' in keys:
             return 'You use the DataType %s but not the corresponding keyword for its unit (%sUnit).'%(kw,kw)
 
@@ -98,15 +99,24 @@ def validate_dict(data):
     if not REGEX1.match(data):
         errors.append('First syntax check did not pass. (Comments with # are not allowed in this check.)')
 
-    name,value = data.split('=')
-    name=str.strip(name)
-    if name == 'RETURNABLES': usage = RETURNA
-    elif name == 'RESTRICTABLES': usage = RESTRICTA
+    if '=' not in data:
+        errors.append('Neither RETURNABLES or RESTRICTABLES assignment found')
+        raise ValidationError(errors)
+
+    name,value = data.split('=',1)
+    name=name.strip()
+    if name == 'RETURNABLES': usage = RETURNABLE
+    elif name == 'RESTRICTABLES': usage = RESTRICTABLE
     else: errors.append('Neither RETURNABLES or RESTRICTABLES assignment found')
-    value = ''.join(map(str.strip,map(strip,value.splitlines()),'\\'))
-    try: value=eval(value)
-    except:
+    # join continuation lines back into one expression
+    value = ''.join(line.strip().rstrip('\\').strip() for line in value.splitlines())
+    try: value=ast.literal_eval(value)
+    except Exception:
         errors.append('Second check (evalution) did not pass. Please check that your input is correct Python code.')
+        raise ValidationError(errors)
+
+    if not isinstance(value,dict):
+        errors.append('The right-hand side is not a dictionary.')
         raise ValidationError(errors)
 
     for kw in value.keys():
@@ -116,7 +126,7 @@ def validate_dict(data):
             continue
         err = check_keyword_usage(kw,usage)
         if err: errors.append(err)
-        if usage==RETURNA:
+        if usage==RETURNABLE:
             err = check_returnvalues(kw,value[kw])
             if err: errors.append(err)
             err = check_unit(kw,value.keys())
@@ -153,17 +163,16 @@ blockmap = {'so':'Source.',
 }
 
 def makedicts(selected):
-    content = 'RETURNABLES = {\ \n'
+    content = 'RETURNABLES = {\\ \n'
     for kw in selected:
-        if RETURNA in kw.usage.iterator():
-            if blockmap.has_key(kw.block): prefix=blockmap[kw.block]
-            else: prefix=''
+        if kw.usage.filter(name=RETURNABLE).exists():
+            prefix = blockmap.get(kw.block,'')
             content += '\'%s\':\'%s\',\n'%(kw.name,prefix)
 
     content += '}\n\n\n'
-    content += 'RESTRICTABLES = {\ \n'
+    content += 'RESTRICTABLES = {\\ \n'
     for kw in selected:
-        if RESTRICTA in kw.usage.iterator():
+        if kw.usage.filter(name=RESTRICTABLE).exists():
             content += '\'%s\':\'\',\n'%kw.name
 
     content += '}\n\n\n'
@@ -176,9 +185,12 @@ class SelectKeyWordFormSet(forms.models.BaseModelFormSet):
 
 
 def makenew(request):
-    q = Q(usage=RESTRICTA) | Q(usage=RETURNA)
+    q = Q(usage__name=RESTRICTABLE) | Q(usage__name=RETURNABLE)
     queryset = KeyWord.objects.filter(q).distinct()
-    MakeNewFormSet = modelformset_factory(KeyWord,formset=SelectKeyWordFormSet,extra=0)
+    # no editable model fields: the form only collects the "include" ticks,
+    # everything shown comes from form.instance
+    MakeNewFormSet = modelformset_factory(KeyWord,formset=SelectKeyWordFormSet,
+                                          fields=(),extra=0)
 
     if request.method == 'POST':
         formset = MakeNewFormSet(request.POST,request.FILES,queryset=queryset)
@@ -188,7 +200,7 @@ def makenew(request):
                 if form['include']: selected.append(form['id'])
 
             filecontent = makedicts(selected)
-            response=HttpResponse(filecontent,mimetype='text/x-python')
+            response=HttpResponse(filecontent,content_type='text/x-python')
             response['Content-Disposition'] = 'attachment; filename=dictionaries.py'
             return response
 

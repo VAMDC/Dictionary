@@ -2,8 +2,8 @@ from django.db import models
 
 class Usage(models.Model):
     name = models.CharField(max_length=256)
-    def __unicode__(self):
-        return u'%s'%self.name
+    def __str__(self):
+        return self.name
 
 class KeyWord(models.Model):
     name = models.CharField(max_length=256,unique=True)
@@ -46,8 +46,8 @@ class KeyWord(models.Model):
         # break the fragment identifier
         return self.name.strip()
 
-    def __unicode__(self):
-        return u'%s'%self.name
+    def __str__(self):
+        return self.name
 
     class Meta:
         ordering = ["name"]

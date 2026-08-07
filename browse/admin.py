@@ -1,41 +1,41 @@
 from django.contrib import admin
-from django.contrib.admin.models import LogEntry
-from .models import *
+from .models import KeyWord, Usage
 
-RETURNA=Usage.objects.get(pk=2)
-REQUESTA=Usage.objects.get(pk=3)
-RESTRICTA=Usage.objects.get(pk=1)
+RETURNABLE = 'Returnable'
+REQUESTABLE = 'Requestable'
+RESTRICTABLE = 'Restrictable'
 
-def log_usagechange(use,addORrem):
-    logentr = LogEntry(user=request.user)
+def usage(name):
+    """Looked up per call: the database must not be touched at import time."""
+    return Usage.objects.get(name=name)
 
 def keywords(obj):
     return ', '.join([o.name for o in obj.keyword_set.iterator()])
 
 def make_returnable(modeladmin, request, queryset):
-    for kw in queryset: kw.usage.add(RETURNA)
+    for kw in queryset: kw.usage.add(usage(RETURNABLE))
 #    LogEntry.objects.log_action( user=request.user,
 #				change_message='')
 make_returnable.short_description = "Mark selected keywords Returnable"
 
 def unmake_returnable(modeladmin, request, queryset):
-    for kw in queryset: kw.usage.remove(RETURNA)
+    for kw in queryset: kw.usage.remove(usage(RETURNABLE))
 unmake_returnable.short_description = "Unmark selected keywords Returnable"
 
 def make_requestable(modeladmin, request, queryset):
-    for kw in queryset: kw.usage.add(REQUESTA)
+    for kw in queryset: kw.usage.add(usage(REQUESTABLE))
 make_requestable.short_description = "Mark selected keywords Requestable"
 
 def unmake_requestable(modeladmin, request, queryset):
-    for kw in queryset: kw.usage.remove(REQUESTA)
+    for kw in queryset: kw.usage.remove(usage(REQUESTABLE))
 unmake_requestable.short_description = "Unmark selected keywords Requestable"
 
 def make_restrictable(modeladmin, request, queryset):
-    for kw in queryset: kw.usage.add(RESTRICTA)
+    for kw in queryset: kw.usage.add(usage(RESTRICTABLE))
 make_restrictable.short_description = "Mark selected keywords Restrictable"
 
 def unmake_restrictable(modeladmin, request, queryset):
-    for kw in queryset: kw.usage.remove(RESTRICTA)
+    for kw in queryset: kw.usage.remove(usage(RESTRICTABLE))
 unmake_restrictable.short_description = "Unmark selected keywords Restrictable"
 
 def toggle_datatype(modeladmin, request, queryset):

@@ -12,11 +12,8 @@
 <table>
   <tr><th>Use?</th><th>Keyword</th><th>Description</th></tr>
 {% for form in formset.forms %}
-<tr><td>{{ form.include }}{{ form.id }}
-{{ form.name.as_hidden }}
-{{ form.sdescr.as_hidden }}
-{{ form.ldescr.as_hidden }}
-</td><td>{{ form.instance.name }}</td><td>{{ form.instance.ldescr }}</td></tr>
+<tr><td>{{ form.include }}{{ form.id }}</td>
+<td>{{ form.instance.name }}</td><td>{{ form.instance.ldescr }}</td></tr>
 {% endfor %}
 </table>
 <p/>
