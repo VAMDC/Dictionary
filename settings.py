@@ -72,8 +72,9 @@ DATA_UPLOAD_MAX_NUMBER_FIELDS = 5000
 ALLOWED_HOSTS = setting('VAMDC_DICT_HOSTS', '*').split(',')
 
 # Django >= 4 checks the Origin header on POST, so the admin login needs the
-# public https origin listed here when running behind Caddy
-CSRF_TRUSTED_ORIGINS = setting('VAMDC_DICT_ORIGINS', 'https://dict.vamdc.org').split(',')
+# public https origin listed here. Caddy redirects the .org name to .eu, so .eu
+# is what browsers actually post from.
+CSRF_TRUSTED_ORIGINS = setting('VAMDC_DICT_ORIGINS', 'https://dictionary.vamdc.eu').split(',')
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 TEMPLATES = [

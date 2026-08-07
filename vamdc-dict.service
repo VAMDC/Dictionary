@@ -1,5 +1,5 @@
 [Unit]
-Description=The gunicorn sevice that runs dict.vamdc.org
+Description=The gunicorn sevice that runs dictionary.vamdc.eu
 After=network.target
 
 [Service]
