@@ -159,6 +159,30 @@ h1,h2,h3 {
 	margin-left: 18px;
 }
 
+/* outcome of a dictionary check */
+.result {
+	border: 1px solid;
+	margin: 1em 0;
+	padding: 0.5em 1em;
+}
+.result.good {
+	background-color: #EAF6EA;
+	border-color: #4A9A4A;
+	color: #1E6B1E;
+}
+.result.bad {
+	background-color: #FBEAEA;
+	border-color: #B34040;
+	color: #8A2020;
+}
+.result ul {
+	margin: 0.5em 0 0 0;
+}
+.result li {
+	list-style: square;
+	margin: 0.3em 0 0.3em 18px;
+}
+
 /* search form */
 .styled {
 	border: 3px double #E5E5E5;
